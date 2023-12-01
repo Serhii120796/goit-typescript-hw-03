@@ -34,11 +34,7 @@ abstract class House {
 }
 
 class MyHouse extends House {
-  constructor(key: Key) {
-    super(key);
-  }
-
-  openDoor(key: Key): void {
+    openDoor(key: Key): void {
     if (this.key.getSignature() === key.getSignature()) {
       this.door = true;
     }
