@@ -1,47 +1,59 @@
 class Key {
-    signature: Math.random();
-    getSignature(): void{
-        return Math.random;
-    };
+   constructor(private signature: number) { }
+
+  getSignature(): number {
+    return this.signature;
+  }
 }
 
 class Person {
-    constructor(private key: Key) {
-    }
-    getKey(): void{
-        return key;
-    };
+  constructor(private key: Key) {}
+
+  getKey(): Key {
+    return this.key;
+  }
 }
 
 abstract class House {
-    door: boolean;
-    key: Key;
-    comeIn() { 
-        // додає об'єкт класу Person у масив tenants, якщо door відкрита.
-    };
-    
-    abstract OpenDoor() {
-        // який приймає об'єкт класу Key
-     };
+  protected tenants: Person[] = [];
+  protected door: boolean = false;
 
+  constructor(protected key: Key) {}
+
+  comeIn(person: Person): void {
+    if (!this.door) {
+      console.log("The door is closed.");
+      return;
+    }
+    this.tenants.push(person);
+    console.log(`Welcome home, ${person.getKey().getSignature()}!`);
+    this.door = false;
+  }
+
+  public abstract openDoor(key: Key): void;
 }
 
 class MyHouse extends House {
-    OpenDoor() {
-        // який приймає об'єкт класу Key
-        // Якщо ключ, переданий цьому методу, збігається з ключем, збереженим як key, то двері відчиняються.
-     };
+  constructor(key: Key) {
+    super(key);
+  }
+
+  openDoor(key: Key): void {
+    if (this.key.getSignature() === key.getSignature()) {
+      this.door = true;
+    }
+  }
 }
 
-// Cпробуйте відтворити сценарій, в якому людина приходить додому.
-// const key = new Key();
+const key = new Key(Math.random());
 
-// const house = new MyHouse(key);
-// const person = new Person(key);
+const house = new MyHouse(key);
+const person = new Person(key);
 
-// house.openDoor(person.getKey());
+house.openDoor(person.getKey());
 
-// house.comeIn(person);
+house.comeIn(person);
+
 
 
 export { };
